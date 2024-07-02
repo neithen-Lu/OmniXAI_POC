@@ -400,3 +400,83 @@ def guided_bp(
 
     raise ValueError(f"`model` should be a tf.keras.Model "
                      f"or a torch.nn.Module instead of {type(model)}")
+
+
+def _grad_tf(
+        X,
+        y,
+        model,
+        preprocess_function,
+        mode: str,
+        num_samples,
+        sigma: float
+):
+    import tensorflow as tf
+
+    inputs = preprocess_function(X) if preprocess_function is not None else X.to_numpy()
+    inputs = tf.convert_to_tensor(inputs)
+    if mode == "classification":
+        if y is not None:
+            if type(y) == int:
+                y = [y for _ in range(len(X))]
+            else:
+                assert len(X) == len(y), (
+                    f"Parameter ``y`` is a {type(y)}, the length of y "
+                    f"should be the same as the number of images in X."
+                )
+        else:
+            predictions = model(inputs)
+            y = tf.argmax(predictions, axis=-1).numpy().astype(int)
+    else:
+        y = None
+
+    gradients = 0
+    input_images = inputs.numpy()
+    for i in range(num_samples):
+        x = tf.Variable(
+            input_images,
+            dtype=tf.float32,
+            trainable=True
+        )
+        with tf.GradientTape() as tape:
+            tape.watch(x)
+            outputs = model(x)
+            if y is not None:
+                outputs = tf.reshape(tf.gather(outputs, y, axis=1), shape=(-1,))
+            grad = tape.gradient(outputs, x)
+            gradients += grad.numpy()
+
+    gradients = gradients / num_samples
+    return gradients, y
+
+
+def grad(
+        X,
+        y,
+        model,
+        preprocess_function,
+        mode: str,
+        num_samples: int,
+        sigma: float
+):
+    if is_torch_available():
+        import torch.nn as nn
+
+        if isinstance(model, nn.Module):
+            raise NotImplementedError
+
+    if is_tf_available():
+        import tensorflow as tf
+
+        if isinstance(model, tf.keras.Model):
+            return _grad_tf(
+                X=X,
+                y=y,
+                model=model,
+                preprocess_function=preprocess_function,
+                mode=mode,
+                num_samples=num_samples,
+                sigma=sigma
+            )
+
+    raise ValueError(f"`model` should be a tf.keras.Model instead of {type(model)}")
