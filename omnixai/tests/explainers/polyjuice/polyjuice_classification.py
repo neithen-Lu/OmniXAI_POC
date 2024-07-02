@@ -9,7 +9,7 @@ import transformers
 import numpy as np
 
 from omnixai.data.text import Text
-from omnixai.explainers.nlp.counterfactual.polyjuice import Polyjuice
+from OmniXAI_POC.omnixai.explainers.nlp.counterfactual.mypolyjuice import MyPolyjuice
 
 
 class TestPolyjuice(unittest.TestCase):
@@ -33,7 +33,7 @@ class TestPolyjuice(unittest.TestCase):
             return np.array(scores)
 
         self.idx2label = {"NEGATIVE": 0, "POSITIVE": 1}
-        self.explainer = Polyjuice(predict_function=_predict)
+        self.explainer = MyPolyjuice(predict_function=_predict)
 
     def test_explain(self):
         x = Text([

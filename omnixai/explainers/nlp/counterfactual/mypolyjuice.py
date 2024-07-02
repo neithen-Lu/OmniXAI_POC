@@ -17,7 +17,7 @@ from omnixai.data.text import Text
 from omnixai.explanations.tabular.counterfactual import CFExplanation
 
 
-class Polyjuice(ExplainerBase):
+class MyPolyjuice(ExplainerBase):
     """
     The counterfactual explainer for NLP tasks.
     The method implemented here is based on the model developed by Wu et al.,
@@ -42,7 +42,7 @@ class Polyjuice(ExplainerBase):
         self.mode = mode
         self.predict_function = predict_function
 
-        from polyjuice import Polyjuice
+        from .polyjuice import Polyjuice
         self.explainer = Polyjuice(
             model_path=kwargs.get("model_path", "uw-hai/polyjuice"),
             is_cuda=kwargs.get("cuda", True)

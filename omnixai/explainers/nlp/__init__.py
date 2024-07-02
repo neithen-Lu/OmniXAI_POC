@@ -9,7 +9,7 @@ from .agnostic.lime import LimeText
 from .agnostic.shap import ShapText
 from .agnostic.l2x import L2XText
 from .specific.ig import IntegratedGradientText
-from .counterfactual.polyjuice import Polyjuice
+from .counterfactual.mypolyjuice import MyPolyjuice
 
 __all__ = [
     "NLPExplainer",
@@ -17,5 +17,5 @@ __all__ = [
     "ShapText",
     "L2XText",
     "IntegratedGradientText",
-    "Polyjuice"
+    "MyPolyjuice"
 ]

@@ -8,7 +8,7 @@ import unittest
 from transformers import pipeline
 
 from omnixai.data.text import Text
-from omnixai.explainers.nlp.counterfactual.polyjuice import Polyjuice
+from OmniXAI_POC.omnixai.explainers.nlp.counterfactual.mypolyjuice import MyPolyjuice
 
 
 class TestPolyjuice(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestPolyjuice(unittest.TestCase):
                 outputs = [outputs]
             return [output["answer"] for output in outputs]
 
-        self.explainer = Polyjuice(predict_function=_predict, mode="qa")
+        self.explainer = MyPolyjuice(predict_function=_predict, mode="qa")
 
     def test_explain(self):
         x = Text([
