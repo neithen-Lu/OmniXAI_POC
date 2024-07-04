@@ -8,10 +8,12 @@ from .auto import TimeseriesExplainer
 from .agnostic.shap import ShapTimeseries
 from .counterfactual.ce import CounterfactualExplainer
 from .counterfactual.mace import MACEExplainer
+from .agnostic.lime import LimeTimeseries
 
 __all__ = [
     "TimeseriesExplainer",
     "ShapTimeseries",
     "CounterfactualExplainer",
-    "MACEExplainer"
+    "MACEExplainer",
+    "LimeTimeseries"
 ]
