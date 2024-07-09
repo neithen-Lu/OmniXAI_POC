@@ -200,19 +200,21 @@ def ts_rolling_mean(
     ts: np.ndarray,
     window_size: int,
 ):
-    """ts_rolling_mean computes rolling mean for tsFrame and numpy ndarray objects.
+    """ts_rolling_mean computes rolling mean for numpy ndarray objects.
     The reported rolling mean is of same dimension that of input time series,
     the boundary are adaptively adjusted, for valid window length only.
 
     Args:
-        ts (Union[tsFrame, numpy ndarray]): Time series data, as tsFrame or numpy ndarray object.
+        ts (numpy ndarray): Time series data, as numpy ndarray object.
         window_size (int): number of consecutive data points over which the averaging
             will be performed.
 
     Returns:
-        df (Union[tsFrame, numpy ndarray]): depending on the input data types the return types is
-            set to tsFrame, or numpy ndarray
+        df (numpy ndarray)
     """
+    # shape check
+    if ts.shape[0] < ts.shape[1]:
+        raise NotImplementedError('Only support n_obs >= n_variables')
     df = ts.copy()
     if isinstance(ts, np.ndarray):
         if len(ts.shape) == 1:
@@ -243,12 +245,11 @@ def ts_split_mean_residual(
     format.
 
     Args:
-        ts (Union[tsFrame, numpy ndarray]): input time series as tsFrame or numpy array
+        ts (numpy ndarray): input time series as tsFrame or numpy array
         window_size (int): number of observations for averaging.
 
     Returns:
-        tuple (Union[Tuple[numpy ndarray, numpy ndarray], Tuple[tsFrame, tsFrame]]): depending
-            on the input type it returns tuple of two dataset, of same dimension as
+        tuple (Tuple[numpy ndarray, numpy ndarray]): of same dimension as
             input.
     """
     ts_avg = ts_rolling_mean(ts, window_size)

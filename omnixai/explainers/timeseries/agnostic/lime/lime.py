@@ -98,7 +98,7 @@ class LimeTimeseries(ExplainerBase):
                 )
             )
             f_predict_samples = [
-                self.model(x_perturbations[i]) for i in range(x_perturbations.shape[0])
+                self.model(x_perturbations[i]) for i in range(len(x_perturbations))
             ]
             f_predict_samples = np.array(f_predict_samples)
 
@@ -139,15 +139,17 @@ class LimeTimeseries(ExplainerBase):
 
         ### generate time series perturbations
         x_perturbations = self._ts_perturb(x=X_numpy)
+        x_perturbations_ts = [Timeseries(data=x) for x in x_perturbations]
 
         ### generate y
-        y_perturbations = self._batch_predict(x_perturbations)
+        y_perturbations = self._batch_predict(x_perturbations_ts)
         if y_perturbations is None:
             raise Exception(
                 "Model prediction could not be computed for gradient samples."
             )
 
         y_perturbations = np.asarray(y_perturbations).astype("float")
+        assert y_perturbations.shape[0] == self.n_perturbations, 'Prediction of perturbed x has invalid shape'
 
         ### compute weights using a linear model
         x_perturbations = x_perturbations.reshape(self.n_perturbations,-1)
