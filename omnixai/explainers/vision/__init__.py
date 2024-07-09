@@ -18,6 +18,7 @@ from .specific.guided_bp import GuidedBP
 from .counterfactual.ce import CounterfactualExplainer
 from .specific.feature_visualization.visualizer import \
     FeatureVisualizer, FeatureMapVisualizer
+from .specific.saliency import Saliency
 
 __all__ = [
     "VisionExplainer",
@@ -35,5 +36,6 @@ __all__ = [
     "GuidedBP",
     "CounterfactualExplainer",
     "FeatureVisualizer",
-    "FeatureMapVisualizer"
+    "FeatureMapVisualizer",
+    "Saliency"
 ]

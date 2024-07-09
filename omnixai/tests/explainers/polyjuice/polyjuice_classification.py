@@ -9,7 +9,7 @@ import transformers
 import numpy as np
 
 from omnixai.data.text import Text
-from OmniXAI_POC.omnixai.explainers.nlp.counterfactual.mypolyjuice import MyPolyjuice
+from omnixai.explainers.nlp.counterfactual.mypolyjuice import MyPolyjuice
 
 
 class TestPolyjuice(unittest.TestCase):
@@ -46,12 +46,7 @@ class TestPolyjuice(unittest.TestCase):
         ])
         explanations = self.explainer.explain(x)
 
-        from omnixai.visualization.dashboard import Dashboard
-        dashboard = Dashboard(
-            instances=x,
-            local_explanations={"polyjuice": explanations}
-        )
-        dashboard.show()
+        print(explanations)
 
 
 if __name__ == "__main__":
